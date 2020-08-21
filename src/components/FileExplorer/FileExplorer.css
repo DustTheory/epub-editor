@@ -1,0 +1,90 @@
+.directory-tree {
+
+}
+
+.directory-tree .directory {
+
+}
+
+.directory-tree .directory > .header {
+    height: 15px;
+    width: 100%;
+    padding: 4px 0;
+
+    /* Keep line height the same as header height to center text */
+    line-height: 15px;
+    text-align: center;
+
+    display: flex;
+
+    cursor: pointer;
+}
+
+.directory-tree .directory > .header.selected {
+    background-color: rgba(236, 236, 236, 0.486);
+}
+
+.directory-tree .directory > .header:hover {
+    background-color: rgba(236, 236, 236, 0.486);
+}
+
+
+.directory-tree .directory > .header > .icon {
+    height: 100%;
+    margin: 0 5px;
+}
+
+.directory-tree .directory > .header > .icon svg {
+    height: 100%;
+    transform: scale(0.9);
+}
+
+.directory-tree .directory > .header > .directory-name {
+    font-size: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.directory-tree .directory > .body {
+    display: none;
+    margin: 2px 0;
+    margin-left: 10px;
+    padding-left: 5px;
+    border-left: 1px solid rgb(240, 240, 240);
+}
+
+.directory-tree .directory.expanded > .body {
+    display: block;
+}
+
+.directory-tree .directory > .body > .file {
+    height: 15px;
+    width: 100%;
+    padding: 4px 0;
+
+    /* Keep line height the same as header height to center text */
+    line-height: 15px;
+    text-align: center;
+
+    display: flex;
+
+    cursor: pointer;
+}
+
+
+.directory-tree .directory > .body > .file > .icon {
+    height: 100%;
+    margin: 0 5px;
+}
+
+.directory-tree .directory > .body > .file  > .icon > img {
+    height: 100%;
+}
+
+.directory-tree .directory > .body > .file > .file-name {
+    font-size: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}

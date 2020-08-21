@@ -1,0 +1,7 @@
+@import '../../styles/vars.css';
+
+.faeg {
+    margin-top: 20px; /* For now looks better */
+    display: grid;
+    grid-template: 1fr / 50px 300px 10fr;
+}

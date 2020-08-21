@@ -1,0 +1,33 @@
+@import '../../styles/vars.css';
+
+.sidebar-element {
+    height: 600px;
+    padding: 5px;
+}
+
+.sidebar-element > .header {
+    height: 20px;
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+}
+
+.sidebar-element > .header > .title {
+    color: rgb(56, 56, 56);
+}
+
+.sidebar-element > .header > .buttons {
+    margin-left: auto;
+    height: 100%;
+    display: flex;
+    margin-right: 20px;
+    color: rgb(66, 66, 66);
+}
+
+.sidebar-element > .header > .buttons * {
+    cursor: pointer;
+}
+
+.sidebar-element > .header > .buttons > .button:hover {
+    color: black;
+}

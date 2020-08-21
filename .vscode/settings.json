@@ -1,0 +1,6 @@
+{
+    "jslint.version": "es8",
+    "files.associations": {
+        "*.js": "javascriptreact"
+      }
+}
