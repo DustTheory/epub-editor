@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import css from './MainView.css';
+
 class Editor extends Component {
     constructor(props) {
         super(props);
@@ -7,8 +9,8 @@ class Editor extends Component {
     }
     render() { 
         return (
-            <div className="editor">
-                Editor
+            <div id="main-view" className="main-view">
+                {this.props.children}   
             </div>
         );
     }

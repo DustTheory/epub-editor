@@ -24,8 +24,8 @@ class ViewIcon extends Component {
 
     render() {
         return (
-            <div className={"icon tooltip" + (this.props.active ? ' active ' : ' ')}>
-                <input checked={this.props.active} onChange={this.props.onViewChange} type="radio" value={this.props.viewId} id={this.id} name="activity-bar-state"/>
+            <div className={"icon tooltip" + (this.props.active && !this.props.hideSidebar ? ' active ' : ' ')}>
+                <input checked={this.props.active} readOnly={true} onClick={this.props.onViewChange} type="radio" value={this.props.viewId} id={this.id} name="activity-bar-state"/>
                 <label htmlFor={this.id}>
                     <FontAwesomeIcon className="fa-2x" icon={this.props.icon}/>
                 </label>
@@ -48,8 +48,8 @@ class ActivityBar extends Component {
     }
 
     render() {
-        let viewIcons = Object.values(this.props.views).map( view => 
-            <ViewIcon key={view.id} viewId={view.id} icon={view.icon} active={this.props.activeView == view.id} onViewChange={this.onViewChange} tooltipText={view.name}/>
+        let viewIcons = Object.values(this.props.views).map( view => !view.hideInNav && 
+            (<ViewIcon key={view.id} hideSidebar={this.props.hideSidebar} viewId={view.id} icon={view.icon} active={this.props.activeView == view.id} onViewChange={this.onViewChange} tooltipText={view.name}/>)
         );
 
         return (

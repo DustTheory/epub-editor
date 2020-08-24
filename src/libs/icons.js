@@ -1,13 +1,13 @@
-import cssIcon from './icons/css.svg';
-import genericFileIcon from './icons/file.svg';
-import fontIcon from './icons/font.svg';
-import imageIcon from './icons/image.svg';
-import javascriptIcon from './icons/javascript.svg';
-import metadataIcon from './icons/readme.svg';
-import svgIcon from './icons/svg.svg';
-import videoIcon from './icons/video.svg';
-import audioIcon from './icons/audio.svg';
-import xmlIcon from './icons/xml.svg';
+import cssIcon from '../assets/icons/css.svg';
+import genericFileIcon from '../assets/icons/file.svg';
+import fontIcon from '../assets/icons/font.svg';
+import imageIcon from '../assets/icons/image.svg';
+import javascriptIcon from '../assets/icons/javascript.svg';
+import metadataIcon from '../assets/icons/readme.svg';
+import svgIcon from '../assets/icons/svg.svg';
+import videoIcon from '../assets/icons/video.svg';
+import audioIcon from '../assets/icons/audio.svg';
+import xmlIcon from '../assets/icons/xml.svg';
 
 let extensionIconMap = {
     'css': cssIcon,

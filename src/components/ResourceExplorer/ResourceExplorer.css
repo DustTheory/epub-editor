@@ -1,12 +1,4 @@
-.directory-tree {
-
-}
-
-.directory-tree .directory {
-
-}
-
-.directory-tree .directory > .header {
+.resource-explorer .directory > .header {
     height: 15px;
     width: 100%;
     padding: 4px 0;
@@ -20,33 +12,33 @@
     cursor: pointer;
 }
 
-.directory-tree .directory > .header.selected {
+.resource-explorer .directory > .header.selected {
     background-color: rgba(236, 236, 236, 0.486);
 }
 
-.directory-tree .directory > .header:hover {
+.resource-explorer .directory > .header:hover {
     background-color: rgba(236, 236, 236, 0.486);
 }
 
 
-.directory-tree .directory > .header > .icon {
+.resource-explorer .directory > .header > .icon {
     height: 100%;
     margin: 0 5px;
 }
 
-.directory-tree .directory > .header > .icon svg {
+.resource-explorer .directory > .header > .icon svg {
     height: 100%;
     transform: scale(0.9);
 }
 
-.directory-tree .directory > .header > .directory-name {
+.resource-explorer .directory > .header > .directory-name {
     font-size: 12px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.directory-tree .directory > .body {
+.resource-explorer .directory > .body {
     display: none;
     margin: 2px 0;
     margin-left: 10px;
@@ -54,11 +46,11 @@
     border-left: 1px solid rgb(240, 240, 240);
 }
 
-.directory-tree .directory.expanded > .body {
+.resource-explorer .directory.expanded > .body {
     display: block;
 }
 
-.directory-tree .directory > .body > .file {
+.resource-explorer .directory > .body > .file {
     height: 15px;
     width: 100%;
     padding: 4px 0;
@@ -73,16 +65,16 @@
 }
 
 
-.directory-tree .directory > .body > .file > .icon {
+.resource-explorer .directory > .body > .file > .icon {
     height: 100%;
     margin: 0 5px;
 }
 
-.directory-tree .directory > .body > .file  > .icon > img {
+.resource-explorer .directory > .body > .file  > .icon > img {
     height: 100%;
 }
 
-.directory-tree .directory > .body > .file > .file-name {
+.resource-explorer .directory > .body > .file > .file-name {
     font-size: 12px;
     text-overflow: ellipsis;
     overflow: hidden;

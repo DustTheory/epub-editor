@@ -1,0 +1,24 @@
+
+
+.live-editor-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.live-editor-container .live-editor {
+    height: 90%;
+    max-width: 1000px;
+    width: 90%;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow: auto;
+}
+
+.example::-webkit-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+

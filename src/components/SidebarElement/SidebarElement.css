@@ -1,8 +1,25 @@
 @import '../../styles/vars.css';
 
 .sidebar-element {
-    height: 600px;
-    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 2px 0;
+    flex: 0 0 30px;
+}
+
+.sidebar-element.sidebar-element.expanded {
+    flex-grow: 1;
+}
+
+.sidebar-element > .body {
+    height: 100%;
+    overflow: auto;
+    display: none;
+}
+
+.sidebar-element.expanded > .body {
+    display: block;
 }
 
 .sidebar-element > .header {
@@ -13,19 +30,10 @@
 }
 
 .sidebar-element > .header > .title {
+    padding: 0 5px;
+    font-size: 12px;
+    text-transform: uppercase;
     color: rgb(56, 56, 56);
-}
-
-.sidebar-element > .header > .buttons {
-    margin-left: auto;
-    height: 100%;
-    display: flex;
-    margin-right: 20px;
-    color: rgb(66, 66, 66);
-}
-
-.sidebar-element > .header > .buttons * {
-    cursor: pointer;
 }
 
 .sidebar-element > .header > .buttons > .button:hover {

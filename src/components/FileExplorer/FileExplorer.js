@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 
 import SidebarElement from '../SidebarElement';
-import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import Tree from './Tree';
+import TreeExplorer from '../TreeExplorer';
 
 class FileExplorer extends Component {
     constructor(props) {
         super(props);
+        this.onClickFile = this.onClickFile.bind(this);
     }
+
+    onClickFile(name, structure){
+        this.props.changeOpenFile(name, structure);
+    }
+    
     render() { 
-        let files = this.props.epubFile.unzipped ? this.props.epubFile.unzipped.files : {};
-        let loadEpubButton = ( <LoadFileInput onFileChange={this.props.onEpubFileChange}/> );
-        console.log(this.props.epubFile);
+        let files = this.props.book?.archive?.zip?.files || {};
+        let structure = buildFileStructure(files);
         return ( 
-            <SidebarElement title="Explorer" buttons={[loadEpubButton]}>
-                <Tree fileName={this.props.epubFile.fileName} files={files}/>
+            <SidebarElement expanded={this.props.expanded && Object.keys(structure).length > 0} onElementHeaderClicked={this.props.onElementHeaderClicked} title="Explorer">
+                <TreeExplorer onClickFile={this.onClickFile} rootDirName={this.props.book?.package?.metadata?.title} structure={structure}/>
             </SidebarElement>
          );
     }
@@ -24,13 +27,20 @@ class FileExplorer extends Component {
 
 export default FileExplorer;
  
-const LoadFileInput = (props) => {
-    return ( 
-        <div className="button">
-            <input onChange={props.onFileChange} style={{ display: 'none' }} id="fileUploadBtn" type="file"/>
-            <label htmlFor="fileUploadBtn">
-                <FontAwesomeIcon style={{ transform: 'scale(0.95)' }}  icon={faFileUpload}/>
-            </label>
-        </div>
-     );
+
+function buildFileStructure(files) {
+    let fileStructure = Object.defineProperty({}, '__isDirectory', {
+        value: true
+    });
+    for (let filepath in files) {
+        if(files[filepath].dir == true)
+            continue;
+        let segments = filepath.split('/');
+        segments.reduce((previous, current, index) =>
+            previous[current] ? previous[current] :
+            previous[current] = Object.defineProperty(index == segments.length - 1 ? files[filepath] : {}, '__isDirectory', {
+                value: index != segments.length - 1
+            }), fileStructure);
+    }
+    return fileStructure;
 }

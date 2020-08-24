@@ -1,0 +1,28 @@
+.welcome-screen {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.welcome-screen > .vertical-center{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-screen > .vertical-center > .content {
+    max-width: 1200px;
+    width: 80%;
+}
+
+.welcome-screen > .vertical-center > .content > h2 {
+    color: rgb(100, 100, 100);
+}
+
+.welcome-screen > .vertical-center > .content > a {
+    display: block;
+    margin: 3px 0;
+}
