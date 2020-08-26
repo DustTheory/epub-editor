@@ -1,12 +1,11 @@
-@import '../../styles/vars.css';
+@import "../../styles/vars.css";
 
 .faeg {
-    height: 100%;
-    display: grid;
-    grid-template: 28px 100% / 50px 300px 1fr;
+	height: 100%;
+	display: grid;
+	grid-template: 28px 100% / 50px 300px 1fr;
 }
 
 .faeg.nosidebar {
-    grid-template: 28px 100% / 50px 1fr;
-
+	grid-template: 28px 100% / 50px 0 1fr;
 }

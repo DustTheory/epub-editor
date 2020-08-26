@@ -1,76 +1,74 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
 
-import CKEditor from 'ckeditor4-react';
+import CkEditor from "ckeditor4-react";
 
-import css from './LiveEditor.css';
-
-
+import css from "./LiveEditor.css";
 
 class LiveEditor extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {  }
+	constructor(props) {
+		super(props);
+		this.state = {};
 
-        this.showOpenFile = this.showOpenFile.bind(this);
-        this.onBeforeCkLoad = this.onBeforeCkLoad.bind(this);
+		this.showOpenFile = this.showOpenFile.bind(this);
+		this.onBeforeCkLoad = this.onBeforeCkLoad.bind(this);
+	}
 
-    }
+	componentDidUpdate() {
+		this.showOpenFile();
+		if (this.props.openFileUrls.anchor != "")
+			this.editorInstance?.document?.$?.getElementById(this.props.openFileUrls.anchor)?.scrollIntoView(true);
+	}
 
-    componentDidUpdate(){
-        this.showOpenFile();
-        this.editorInstance?.document?.getById(this.props.anchor)?.scrollIntoView(true);       
-    }
-    
-    onBeforeCkLoad(CKEDITOR){
-        CKEDITOR.on('instanceReady', (function(e){
-            this.editorInstance = e.editor;
-            // needed to reset editor after switching views
-            this.setState({filename: '', fileContent: ''}, () => {
-                this.showOpenFile();
-            }); 
-        }).bind(this)); 
-    }
+	showOpenFile() {
+		if (this.props.file) {
+			let filename = this.props.file.name;
+			if (filename !== this.state.filename) {
+				this.props.file.async("text").then((fileContent) => {
+					fileContent = swapAssetUrlsForBase64(this.props.book, fileContent);
+					this.setState({ fileContent: fileContent, filename: filename });
+					document.getElementById("live-editor").scrollTop = 0;
+				});
+			}
+		}
+	}
 
-    showOpenFile(){
-        if(this.props.file){
-            let filename = this.props.file.name;
-            if(filename !== this.state.filename){
-                this.props.file.async('text').then((fileContent)=>{
-                    fileContent = swapAssetUrlsForBase64(this.props.book, fileContent);
-                    this.setState({ fileContent: fileContent, filename: filename });
-                });
-            }
-        }
-    }
+	onBeforeCkLoad(CKEDITOR) {
+		CKEDITOR.on(
+			"instanceReady",
+			function (e) {
+				this.editorInstance = e.editor;
+			}.bind(this)
+		);
+	}
 
-    render() { 
-        return ( 
-            <div className="live-editor-container">
-                <div id="live-editor" className="live-editor">
-                    <CKEditor
-                        type={"inline"}
-                        data={this.state.fileContent}
-                        config={{
-                            allowedContent: true
-                        }}
-                        onBeforeLoad={this.onBeforeCkLoad}
-                    />
-                </div>
-            </div>
-         );
-    }
+	render() {
+		return (
+			<div style={this.props.visible ? {} : { display: "none" }} className="live-editor-container">
+				<div id="live-editor" className="live-editor">
+					<CkEditor
+						type={"inline"}
+						data={this.state.fileContent}
+						config={{
+							allowedContent: true,
+						}}
+						onBeforeLoad={this.onBeforeCkLoad}
+					/>
+				</div>
+			</div>
+		);
+	}
 }
 
-function swapAssetUrlsForBase64(book, document){
-    let newDocument = document
-    book.resources.assets.forEach((asset, index) => {
-        if(!book.resources.replacementUrls[index]){
-            console.log(book.resources.replacementUrls);
-            console.log(asset, index);
-        }
-        newDocument = newDocument.replaceAll(asset.href, book.resources.replacementUrls[index]);
-    });
-    return newDocument;
+function swapAssetUrlsForBase64(book, document) {
+	let newDocument = document;
+	book.resources.assets.forEach((asset, index) => {
+		newDocument = newDocument.replaceAll(
+			new RegExp(`=("|')[^'"]*${asset.href}("|')`, "g"),
+			'="' + book.resources.replacementUrls[index] + '"'
+		);
+	});
+	return newDocument;
 }
- 
+
 export default LiveEditor;

@@ -1,82 +1,80 @@
 .resource-explorer .directory > .header {
-    height: 15px;
-    width: 100%;
-    padding: 4px 0;
+	height: 15px;
+	width: 100%;
+	padding: 4px 0;
 
-    /* Keep line height the same as header height to center text */
-    line-height: 15px;
-    text-align: center;
+	/* Keep line height the same as header height to center text */
+	line-height: 15px;
+	text-align: center;
 
-    display: flex;
+	display: flex;
 
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .resource-explorer .directory > .header.selected {
-    background-color: rgba(236, 236, 236, 0.486);
+	background-color: rgba(236, 236, 236, 0.486);
 }
 
 .resource-explorer .directory > .header:hover {
-    background-color: rgba(236, 236, 236, 0.486);
+	background-color: rgba(236, 236, 236, 0.486);
 }
 
-
 .resource-explorer .directory > .header > .icon {
-    height: 100%;
-    margin: 0 5px;
+	height: 100%;
+	margin: 0 5px;
 }
 
 .resource-explorer .directory > .header > .icon svg {
-    height: 100%;
-    transform: scale(0.9);
+	height: 100%;
+	transform: scale(0.9);
 }
 
 .resource-explorer .directory > .header > .directory-name {
-    font-size: 12px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+	font-size: 12px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .resource-explorer .directory > .body {
-    display: none;
-    margin: 2px 0;
-    margin-left: 10px;
-    padding-left: 5px;
-    border-left: 1px solid rgb(240, 240, 240);
+	display: none;
+	margin: 2px 0;
+	margin-left: 10px;
+	padding-left: 5px;
+	border-left: 1px solid rgb(240, 240, 240);
 }
 
 .resource-explorer .directory.expanded > .body {
-    display: block;
+	display: block;
 }
 
 .resource-explorer .directory > .body > .file {
-    height: 15px;
-    width: 100%;
-    padding: 4px 0;
+	height: 15px;
+	width: 100%;
+	padding: 4px 0;
 
-    /* Keep line height the same as header height to center text */
-    line-height: 15px;
-    text-align: center;
+	/* Keep line height the same as header height to center text */
+	line-height: 15px;
+	text-align: center;
 
-    display: flex;
+	display: flex;
 
-    cursor: pointer;
+	cursor: pointer;
 }
-
 
 .resource-explorer .directory > .body > .file > .icon {
-    height: 100%;
-    margin: 0 5px;
+	height: 100%;
+	margin: 0 5px;
 }
 
-.resource-explorer .directory > .body > .file  > .icon > img {
-    height: 100%;
+.resource-explorer .directory > .body > .file > .icon > img {
+	height: 100%;
 }
 
 .resource-explorer .directory > .body > .file > .file-name {
-    font-size: 12px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+	font-size: 12px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }

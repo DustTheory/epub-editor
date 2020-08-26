@@ -1,52 +1,51 @@
 .menu-bar {
-    font-family: sans-serif;
-    background-color: #222d32;
-    color: rgb(142, 160, 160);
-    grid-column: 1 / span 3;
-    display: flex;
-    cursor: default;
+	font-family: sans-serif;
+	background-color: #222d32;
+	color: rgb(142, 160, 160);
+	grid-column: 1 / span 3;
+	display: flex;
+	cursor: default;
 }
 
 .menu-bar > .menu-bar-item {
-    position: relative;
-    height: 100%;
+	position: relative;
+	height: 100%;
 }
 
 .menu-bar > .menu-bar-item > .bar-item {
-    height: 100%;
-    padding: 0 7px;
-    line-height: 28px;
+	height: 100%;
+	padding: 0 7px;
+	line-height: 28px;
 }
 
 .menu-bar > .menu-bar-item > .bar-item:hover {
-    background-color: #3e4a50;
+	background-color: #3e4a50;
 }
 
 .menu-bar > .menu-bar-item > .dropdown {
-    position: absolute;
-    background-color: #27343a;
-    display: none;
-    z-index: 200;
+	position: absolute;
+	background-color: #27343a;
+	display: none;
+	z-index: 200;
 }
 
-
 .menu-bar > .menu-bar-item > .dropdown > .dropdown-item {
-    padding: 5px 25px;
-    width: 200px;
-    height: 25px;
-    line-height: 25px;
-    font-size: 15px;
-    text-transform: capitalize;
+	padding: 5px 25px;
+	width: 200px;
+	height: 25px;
+	line-height: 25px;
+	font-size: 15px;
+	text-transform: capitalize;
 }
 
 .menu-bar > .menu-bar-item > .dropdown > .dropdown-item:hover {
-    background-color: #3e4a50;
+	background-color: #3e4a50;
 }
 
 .menu-bar > .menu-bar-item > .dropdown hr {
-    margin: 8px 0;
+	margin: 8px 0;
 }
 
 .menu-bar > .menu-bar-item:hover > .dropdown {
-    display: block;
+	display: block;
 }

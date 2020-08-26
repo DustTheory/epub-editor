@@ -1,55 +1,69 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import css from './BookPreview.css';
+import css from "./BookPreview.css";
+
+import ResizeObserver from "resize-observer-polyfill";
 
 class BookPreview extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {  }
-    }
+	constructor(props) {
+		super(props);
+		this.state = { bookLoadedTimestamp: new Date() };
 
-    
+		this.autoResizeEditor = this.autoResizeEditor.bind(this);
+	}
 
-    componentDidMount(){
-        let mainView = document.getElementById("main-view");
-        var id;
-        window.addEventListener('resize', () => {
-            clearTimeout(id);
-            id = setTimeout(()=>{
-                this.rendition?.resize(mainView.clientWidth*0.8, mainView.clientHeight*0.8);
-            }, 500);
-        });
-     
-        this.props.book.ready.then(() => {
-            this.rendition = this.props.book.renderTo("reader", {width: mainView.clientWidth*0.8, height: mainView.clientHeight*0.8 });
-            let href = this.props.file?.name.split('/').slice(-1)[0];
-            this.rendition.display(href);
-        });
-    }
+	componentDidMount() {
+		const ro = new ResizeObserver(this.autoResizeEditor);
+		ro.observe(document.getElementById("main-view"));
+	}
 
-    componentDidUpdate() {
-        let href = this.props.file?.name.split('/').slice(-1)[0];
-        try {
-        this.rendition?.display(href);
-        }catch(e){
-            console.error(e);
-        }
-    }
+	autoResizeEditor(thing) {
+		document.getElementById("reader").style.marginLeft = "-9999px";
+		let mainView = document.getElementById("main-view");
+		let w = mainView.clientWidth * 0.8;
+		let h = mainView.clientHeight * 0.8;
+		clearTimeout(this.autoResizeEditorTimeoutId);
+		this.autoResizeEditorTimeoutId = setTimeout(() => {
+			document.getElementById("reader").style.removeProperty("margin-left");
+			this.rendition?.resize(w, h);
+		}, 500);
+	}
 
-    componentWillUnmount(){
-        this.rendition?.clear();
-    }
+	componentDidUpdate() {
+		this.props.book.ready
+			.then(() => {
+				if (
+					this.state.bookLoadedTimestamp &&
+					this.props.book.loadedTimestamp &&
+					this.state.bookLoadedTimestamp?.getTime() != this.props.book.loadedTimestamp?.getTime()
+				) {
+					this.rendition = this.props.book.renderTo("reader");
+					this.setState({ bookLoadedTimestamp: this.props.book.loadedTimestamp });
+				}
+				this.rendition.q.enqueue(this.autoResizeEditor);
+			})
+			.then(() => {
+				let displayPromise;
+				if (this.props.book.spine.get(this.props.openFileUrls.contentAnchored))
+					displayPromise = this.rendition?.display(this.props.openFileUrls.contentAnchored);
+				else displayPromise = this.rendition?.display();
+			});
+	}
 
-    render() { 
-        console.log(this.props.file);
-        console.log(this.props.anchor);
-        return ( 
-            <div id="reader" className="reader">
-               <a href="#" onClick={()=>this.rendition?.prev()}>prev</a>
-                <a href="#" onClick={()=>this.rendition?.next()}>next</a> 
-            </div>
-         );
-    }
+	render() {
+		return (
+			<div style={this.props.visible ? {} : { display: "none" }} id="reader" className="reader">
+				<div className="controls">
+					<a href="#" onClick={() => this.rendition?.prev()}>
+						&lt;
+					</a>
+					<a href="#" onClick={() => this.rendition?.next()}>
+						&gt;
+					</a>
+				</div>
+			</div>
+		);
+	}
 }
- 
+
 export default BookPreview;

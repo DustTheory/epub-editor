@@ -1,9 +1,13 @@
-@import '../../styles/vars.css';
+@import "../../styles/vars.css";
 
 .sidebar {
-    height: calc(100% - 28px);
-    display: flex;
-    flex-direction: column;
-    background-color: #f3f3f3;
-    padding-left: 10px;
+	height: calc(100% - 28px);
+	display: flex;
+	flex-direction: column;
+	background-color: #f3f3f3;
+	padding-left: 10px;
+}
+
+.nosidebar .sidebar {
+	padding-left: 0;
 }

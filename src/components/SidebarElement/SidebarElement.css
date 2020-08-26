@@ -1,41 +1,41 @@
-@import '../../styles/vars.css';
+@import "../../styles/vars.css";
 
 .sidebar-element {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 2px 0;
-    flex: 0 0 30px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	padding: 2px 0;
+	flex: 0 0 30px;
 }
 
 .sidebar-element.sidebar-element.expanded {
-    flex-grow: 1;
+	flex-grow: 1;
 }
 
 .sidebar-element > .body {
-    height: 100%;
-    overflow: auto;
-    display: none;
+	height: 100%;
+	overflow: auto;
+	display: none;
 }
 
 .sidebar-element.expanded > .body {
-    display: block;
+	display: block;
 }
 
 .sidebar-element > .header {
-    height: 20px;
-    width: 100%;
-    padding: 10px 0;
-    display: flex;
+	height: 20px;
+	width: 100%;
+	padding: 10px 0;
+	display: flex;
 }
 
 .sidebar-element > .header > .title {
-    padding: 0 5px;
-    font-size: 12px;
-    text-transform: uppercase;
-    color: rgb(56, 56, 56);
+	padding: 0 5px;
+	font-size: 12px;
+	text-transform: uppercase;
+	color: rgb(56, 56, 56);
 }
 
 .sidebar-element > .header > .buttons > .button:hover {
-    color: black;
+	color: black;
 }
