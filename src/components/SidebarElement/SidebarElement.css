@@ -4,12 +4,16 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	padding: 2px 0;
-	flex: 0 0 30px;
+	flex: 0 0 35px;
 }
 
-.sidebar-element.sidebar-element.expanded {
+.sidebar-element.expanded {
 	flex-grow: 1;
+	/* order: -1; I'll think about it */
+}
+
+.sidebar-element.expanded > .header {
+	background-color: inherit;
 }
 
 .sidebar-element > .body {
@@ -25,8 +29,15 @@
 .sidebar-element > .header {
 	height: 20px;
 	width: 100%;
-	padding: 10px 0;
+	padding: 10px 10px 5px 10px;
+	flex-shrink: 0;
 	display: flex;
+	cursor: pointer;
+	background-color: #dad8d8;
+}
+
+.sidebar-element > .header:hover > .title {
+	color: black;
 }
 
 .sidebar-element > .header > .title {

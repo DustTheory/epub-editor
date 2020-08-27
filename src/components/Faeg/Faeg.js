@@ -63,7 +63,9 @@ class Faeg extends Component {
 	 */
 
 	changeView(viewId, ignoreRepeat) {
-		if (viewId == this.state.activeViewId && !ignoreRepeat) this.setState((state) => ({ hideSidebar: !state.hideSidebar }));
+		if(!this.state.book.isOpen)
+			viewId = 'noBookLoaded';
+		if (viewId == this.state.activeViewId && !ignoreRepeat) this.setState((state) => ({ hideSidebar: !state.hideSidebar || !!views[viewId].hideSidebar }));
 		else
 			this.setState({
 				activeViewId: viewId,

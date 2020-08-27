@@ -18,7 +18,7 @@ class BookPreview extends Component {
 	}
 
 	autoResizeEditor(thing) {
-		document.getElementById("reader").style.marginLeft = "-9999px";
+		document.getElementById("reader").style.marginLeft = "-99999px";
 		let mainView = document.getElementById("main-view");
 		let w = mainView.clientWidth * 0.8;
 		let h = mainView.clientHeight * 0.8;

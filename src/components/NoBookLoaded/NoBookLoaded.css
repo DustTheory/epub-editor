@@ -1,0 +1,28 @@
+.no-file-loaded {
+	display: flex;
+	height: 100%;
+	width: 100%;
+}
+
+.no-file-loaded > .vertical-center {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.no-file-loaded > .vertical-center > .content {
+	max-width: 1200px;
+	width: 80%;
+}
+
+.no-file-loaded > .vertical-center > .content > h2 {
+	color: rgb(100, 100, 100);
+}
+
+.no-file-loaded > .vertical-center > .content > a {
+	display: block;
+	margin: 3px 0;
+}

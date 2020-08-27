@@ -66,6 +66,13 @@ const views = {
 		mainView: "export",
 		sidebarElements: [],
 	},
+	noBookLoaded: {
+		id: 'noBookLoaded',
+		name: 'No book loaded',
+		mainView: 'noBookLoaded',
+		hideSidebar: true,
+		hideInNav: true
+	}
 };
 
 export const defaultActiveViewId = "welcomeScreen";

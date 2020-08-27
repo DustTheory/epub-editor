@@ -28,7 +28,7 @@ class SideBar extends Component {
 					["toc", <Toc toc={this.props.book?.navigation?.toc} />],
 					["spine", <Spine spine={this.props.book?.spine} />],
 					["fileExplorer", <FileExplorer changeOpenFile={this.props.changeOpenFile} book={this.props.book} />],
-					["resourceExplorer", <ResourceExplorer resources={this.props.resources} />],
+					["resourceExplorer", <ResourceExplorer resources={this.props.book.resources} />],
 				].map(
 					([elementName, element], index) =>
 						views[this.props.activeViewId].sidebarElements?.includes(elementName) &&

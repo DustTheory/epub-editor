@@ -6,10 +6,12 @@ import WelcomeScreen from "../WelcomeScreen";
 import CodeEditor from "../CodeEditor";
 import LiveEditor from "../LiveEditor/LiveEditor";
 import BookPreview from "../BookPreview";
+import noBookLoaded from '../NoBookLoaded';
 
 import views from "../../libs/views";
+import NoBookLoaded from "../NoBookLoaded";
 
-class Editor extends Component {
+class MainView extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
@@ -17,6 +19,7 @@ class Editor extends Component {
 	render() {
 		return (
 			<div id="main-view" className="main-view">
+				<NoBookLoaded visible={ views[this.props.activeViewId].mainView == "noBookLoaded"} uploadEpubFile={this.props.uploadEpubFile} />
 				<WelcomeScreen
 					visible={views[this.props.activeViewId].mainView == "welcomeScreen"}
 					uploadEpubFile={this.props.uploadEpubFile}
@@ -38,4 +41,4 @@ class Editor extends Component {
 	}
 }
 
-export default Editor;
+export default MainView;

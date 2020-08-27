@@ -21,7 +21,7 @@ class LiveEditor extends Component {
 	}
 
 	showOpenFile() {
-		if (this.props.file) {
+		if (this.props.file && this.props.openFileUrls.contentAnchored) {
 			let filename = this.props.file.name;
 			if (filename !== this.state.filename) {
 				this.props.file.async("text").then((fileContent) => {

@@ -18,7 +18,7 @@ class ResourceExplorer extends Component {
 	}
 
 	render() {
-		let structure = buildTreeStructure(this.props?.resources || []);
+		let structure = buildTreeStructure(this.props.resources || []);
 		return (
 			<SidebarElement expanded={this.props.expanded} onElementHeaderClicked={this.props.onElementHeaderClicked} title="Resources">
 				<TreeExplorer onClickFile={this.onClickFile} structure={structure} />
