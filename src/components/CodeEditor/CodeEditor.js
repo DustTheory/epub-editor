@@ -12,9 +12,10 @@ var beautify_html = require("js-beautify").html;
 var beautify_xml = require("xml-beautifier");
 
 import css from "./CodeEditor.css";
-import { file } from "jszip";
 
-let reader = new FileReader();
+/**
+ * Code editor view component. Uses ace editor.
+ */
 
 class CodeEditor extends Component {
 	constructor(props) {
@@ -22,6 +23,9 @@ class CodeEditor extends Component {
 
 		this.state = {};
 		this.showOpenFile = this.showOpenFile.bind(this);
+	}
+
+	componentDidMount(){
 		this.showOpenFile();
 	}
 
@@ -29,19 +33,31 @@ class CodeEditor extends Component {
 		this.showOpenFile();
 	}
 
-	showOpenFile() {
-		if (this.props.file) {
-			let filename = this.props.file.name;
-			if (filename != this.state.filename)
-				this.props.file.async("text").then((fileContent) => {
-					let filenameExtension = filename.split(".").slice(-1)[0];
-					if (["html", "xhtml", "htm"].includes(filenameExtension)) fileContent = beautify_html(fileContent);
-					else if (filenameExtension == "xml") fileContent = beautify_xml(fileContent);
-					else if (filenameExtension == "js") fileContent = beautify_js(fileContent);
-					else if (filenameExtension == "css") fileContent = beautify_css(fileContent);
-					this.setState({ fileContent: fileContent, filename: filename });
-				});
-		}
+	/**
+	 * Loads open file in code editor if it hasn't already been loaded.
+	 */
+
+	async showOpenFile() {
+		// If no file has been provided or file has already been loaded.
+		if (!this.props.file || this.state.filename == this.props.file.name)
+			return;
+
+		let beautify = (fileContent, filename) =>  {
+			let filenameExtension = filename.split(".").slice(-1)[0];
+			let extensionBeautifierMap = {
+				'xml': beautify_xml,
+				'js': beautify_js,
+				'css': beautify_css,
+				'html': beautify_html,
+				'xhtml': beautify_html,
+				'htm': beautify_html
+			};
+			return (extensionBeautifierMap[filenameExtension])(fileContent);
+		};
+
+		let fileContent = await this.props.file.async("text");
+		this.setState({ fileContent: beautify(fileContent, this.props.file.name), filename: this.props.file.name });
+
 	}
 
 	render() {

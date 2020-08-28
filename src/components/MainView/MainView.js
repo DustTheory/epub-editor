@@ -6,10 +6,13 @@ import WelcomeScreen from "../WelcomeScreen";
 import CodeEditor from "../CodeEditor";
 import LiveEditor from "../LiveEditor/LiveEditor";
 import BookPreview from "../BookPreview";
-import noBookLoaded from '../NoBookLoaded';
+import NoBookLoaded from "../NoBookLoaded";
 
 import views from "../../libs/views";
-import NoBookLoaded from "../NoBookLoaded";
+
+/**
+ * Main view component of faeg.
+ */
 
 class MainView extends Component {
 	constructor(props) {

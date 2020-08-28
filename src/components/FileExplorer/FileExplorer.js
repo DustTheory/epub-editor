@@ -3,7 +3,10 @@ import React, { Component } from "react";
 import SidebarElement from "../SidebarElement";
 
 import TreeExplorer from "../TreeExplorer";
-import Urls from "../../libs/Urls";
+
+/**
+ * File explorer sidebar element component. Built on top of TreeExplorer component.
+ */
 
 class FileExplorer extends Component {
 	constructor(props) {
@@ -35,6 +38,10 @@ class FileExplorer extends Component {
 
 export default FileExplorer;
 
+/**
+ * Turns jszip files object into a tree structure directory hierarchy compatible with TreeExplorer.
+ * @param {object} files 
+ */
 function buildFileStructure(files) {
 	let fileStructure = Object.defineProperty({}, "__isDirectory", {
 		value: true,

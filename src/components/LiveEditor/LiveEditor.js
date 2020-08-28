@@ -1,38 +1,73 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
+import Frame from 'react-frame-component';
 import CkEditor from "ckeditor4-react";
 
 import css from "./LiveEditor.css";
+
+/**
+ * WYSIWYG html editor view component. Editor used is ckeditor4 and is wrapped in an iframe.
+ */
 
 class LiveEditor extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
 
+		this.editorIframeRef = React.createRef();
+
 		this.showOpenFile = this.showOpenFile.bind(this);
 		this.onBeforeCkLoad = this.onBeforeCkLoad.bind(this);
+		this.scrollAnchorIntoView = this.scrollAnchorIntoView.bind(this);
+		this.scrollEditorToTop = this.scrollEditorToTop.bind(this);
 	}
 
 	componentDidUpdate() {
 		this.showOpenFile();
-		if (this.props.openFileUrls.anchor != "")
-			this.editorInstance?.document?.$?.getElementById(this.props.openFileUrls.anchor)?.scrollIntoView(true);
+		this.scrollAnchorIntoView(this.props.openFileUrls.anchor);
 	}
 
-	showOpenFile() {
-		if (this.props.file && this.props.openFileUrls.contentAnchored) {
-			let filename = this.props.file.name;
-			if (filename !== this.state.filename) {
-				this.props.file.async("text").then((fileContent) => {
-					fileContent = swapAssetUrlsForBase64(this.props.book, fileContent);
-					this.setState({ fileContent: fileContent, filename: filename });
-					document.getElementById("live-editor").scrollTop = 0;
-				});
-			}
-		}
+	/**
+	 * Scrolls anchor in rendered section into view.
+	 * Anchor is anchor html element id.
+	 * @param {string} anchor 
+	 */
+
+	scrollAnchorIntoView(anchor){
+		this.editorInstance?.document.$.getElementById(anchor)?.scrollIntoView(true);
 	}
 
+	/**
+	 * Resets view by scrolling the editor to the top of the loaded book section.
+	 * This is mainly done when jumping to a new chapter.
+	 */
+
+	scrollEditorToTop(){
+		this.editorIframeRef.current.node.contentDocument.scrollingElement.scrollTop = 0; 
+	}
+
+	/**
+	 * Loads open book section content into editor if it hasn't already been loaded.
+	 */
+
+	async showOpenFile() {
+		// If no file has been passed or the newly opened file isn't a part of the book's spine or an attempt is made to show already open file.
+		if (!this.props.file || !this.props.openFileUrls.contentAnchored || this.props.file.name === this.state.filename) 
+			return;
+
+		let filename = this.props.file.name;
+		let sectionUrl = this.props.openFileUrls.contentAnchored;
+		let request = this.props.book.load.bind(this.props.book);
+		let content = await this.props.book.spine.get(sectionUrl).render(request);
+		this.setState({ fileContent: content, filename: filename }, this.scrollEditorToTop);
+	}
+
+	/**
+	 * Runs before ckeditor is loaded.
+	 * When editor instance loads, save a reference to it to this.editorInstance. 
+	 * @param {object} CKEDITOR 
+	 */
 	onBeforeCkLoad(CKEDITOR) {
 		CKEDITOR.on(
 			"instanceReady",
@@ -44,31 +79,34 @@ class LiveEditor extends Component {
 
 	render() {
 		return (
-			<div style={this.props.visible ? {} : { display: "none" }} className="live-editor-container">
-				<div id="live-editor" className="live-editor">
-					<CkEditor
-						type={"inline"}
-						data={this.state.fileContent}
-						config={{
-							allowedContent: true,
-						}}
-						onBeforeLoad={this.onBeforeCkLoad}
-					/>
-				</div>
-			</div>
+		 	<div style={this.props.visible ? {} : { display: "none" }} className="live-editor-container">
+				 <Frame ref={this.editorIframeRef}>
+					 {/* Hacky but short and library free way to add a <style> element into dom in react */}
+				 	<style dangerouslySetInnerHTML={{__html: `
+						html {
+							-ms-overflow-style: none;
+							scrollbar-width: none;
+						}
+
+						html::-webkit-scrollbar::-webkit-scrollbar {
+							display: none;
+						}
+
+					`}} />
+					<div id="live-editor" className="live-editor">
+						<CkEditor
+							type={"inline"}
+							data={this.state.fileContent}
+							config={{
+								allowedContent: true,
+							}}
+							onBeforeLoad={this.onBeforeCkLoad}
+						/>
+					</div> 
+				</Frame>
+			</div> 
 		);
 	}
-}
-
-function swapAssetUrlsForBase64(book, document) {
-	let newDocument = document;
-	book.resources.assets.forEach((asset, index) => {
-		newDocument = newDocument.replaceAll(
-			new RegExp(`=("|')[^'"]*${asset.href}("|')`, "g"),
-			'="' + book.resources.replacementUrls[index] + '"'
-		);
-	});
-	return newDocument;
 }
 
 export default LiveEditor;

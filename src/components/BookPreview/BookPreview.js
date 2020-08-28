@@ -1,8 +1,13 @@
 import React, { Component } from "react";
+import async from 'async';
 
 import css from "./BookPreview.css";
 
 import ResizeObserver from "resize-observer-polyfill";
+
+/**
+ * Book preview view component. Renders and manages epubjs Book.
+ */
 
 class BookPreview extends Component {
 	constructor(props) {
@@ -10,49 +15,83 @@ class BookPreview extends Component {
 		this.state = { bookLoadedTimestamp: new Date() };
 
 		this.autoResizeEditor = this.autoResizeEditor.bind(this);
+		this.renderBook = this.renderBook.bind(this);
+		this.displayOpenSection =this.displayOpenSection.bind(this);
 	}
 
 	componentDidMount() {
+		// Encapsulation? Just a suggestion :)
+		this.mainViewElement = document.getElementById("main-view");
+		this.readerRef = React.createRef();
+
+		// Using ResizeObserver to resize rendition inside main-view element.
+		// Couldn't do this better without resize-observer
 		const ro = new ResizeObserver(this.autoResizeEditor);
 		ro.observe(document.getElementById("main-view"));
 	}
 
-	autoResizeEditor(thing) {
-		document.getElementById("reader").style.marginLeft = "-99999px";
-		let mainView = document.getElementById("main-view");
-		let w = mainView.clientWidth * 0.8;
-		let h = mainView.clientHeight * 0.8;
+	/**
+	 * Resizes reader to fit inside main-view. 
+	 */
+	autoResizeEditor() {
+		// Skip if reader hasn't been mounted yet.
+		if(!this.readerRef.current)
+			return;
+
+		// Using margin-left instead of display:none so removeProperty doesn't overwrite reader style.
+		let hideReader = () => this.readerRef.current.style.marginLeft = "-99999px";
+		let showReader = ()	=> this.readerRef.current.style.removeProperty("margin-left");
+		
+		// Hide reader to get main-view dimensions.
+		hideReader();
+		let dimensions = [this.mainViewElement.clientWidth * 0.8, this.mainViewElement.clientHeight * 0.8]
+
+		// Wait until a resize event hasn't been fired for 500ms to do anything. 
 		clearTimeout(this.autoResizeEditorTimeoutId);
 		this.autoResizeEditorTimeoutId = setTimeout(() => {
-			document.getElementById("reader").style.removeProperty("margin-left");
-			this.rendition?.resize(w, h);
+			// Show reader again and resize
+			showReader();
+			this.rendition?.resize(...dimensions);
 		}, 500);
 	}
 
+	/**
+	 * Renders epubjs Book into reader div if it hasn't already been loaded.
+	 * This is checked by comparing the timestamp of when Book had been
+	 * loaded with the timestamp of when the last book that was loded into preview.
+	 */
+	async renderBook(){
+		await this.props.book.ready;
+
+		if (this.state.bookLoadedTimestamp.getTime() != this.props.book.loadedTimestamp.getTime()) {
+			this.rendition = this.props.book.renderTo(this.readerRef.current);
+			this.setState({ bookLoadedTimestamp: this.props.book.loadedTimestamp });
+		}
+		this.rendition.q.enqueue(this.autoResizeEditor);
+	}
+
+	/**
+	 * Displays currently open section. 
+	 */
+	async displayOpenSection(){
+		if(!this.rendition)
+			return;
+		let sectionUrl = this.props.openFileUrls.contentAnchored;
+		if(!this.props.book.spine.get(sectionUrl)) // If section can't be found in book spine, ignore the url.
+			sectionUrl = undefined;
+		this.rendition.display(sectionUrl);
+	}
+
 	componentDidUpdate() {
-		this.props.book.ready
-			.then(() => {
-				if (
-					this.state.bookLoadedTimestamp &&
-					this.props.book.loadedTimestamp &&
-					this.state.bookLoadedTimestamp?.getTime() != this.props.book.loadedTimestamp?.getTime()
-				) {
-					this.rendition = this.props.book.renderTo("reader");
-					this.setState({ bookLoadedTimestamp: this.props.book.loadedTimestamp });
-				}
-				this.rendition.q.enqueue(this.autoResizeEditor);
-			})
-			.then(() => {
-				let displayPromise;
-				if (this.props.book.spine.get(this.props.openFileUrls.contentAnchored))
-					displayPromise = this.rendition?.display(this.props.openFileUrls.contentAnchored);
-				else displayPromise = this.rendition?.display();
-			});
+			async.waterfall([
+				this.renderBook,
+				this.displayOpenSection
+			]);
 	}
 
 	render() {
 		return (
-			<div style={this.props.visible ? {} : { display: "none" }} id="reader" className="reader">
+			<div style={this.props.visible ? {} : { display: "none" }} className="reader" ref={this.readerRef}>
 				<div className="controls">
 					<a href="#" onClick={() => this.rendition?.prev()}>
 						&lt;

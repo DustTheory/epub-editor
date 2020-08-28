@@ -9,6 +9,10 @@ import Spine from "../Spine";
 
 import views from "../../libs/views";
 
+/**
+ * Faeg sidebar component
+ */
+
 class SideBar extends Component {
 	constructor(props) {
 		super(props);

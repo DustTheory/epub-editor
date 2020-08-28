@@ -7,9 +7,39 @@ import views from "../../libs/views";
 
 import css from "./ActivityBar.css";
 
-const Tooltip = (props) => {
-	return <div className="tooltip-text">{props.text}</div>;
-};
+/**
+ * Component for leftmost vertical bar in faeg. Allows for switching views.
+ */
+
+class ActivityBar extends Component {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		let viewIcons = Object.values(views).map(
+			(view) =>
+				!view.hideInNav && (
+					<ViewIcon
+						key={view.id}
+						viewId={view.id}
+						icon={view.icon}
+						active={this.props.activeViewId == view.id && !this.props.sideBarHidden}
+						changeView={this.props.changeView}
+						tooltipText={view.name}
+					/>
+				)
+		);
+
+		return <div className="activity-bar">{viewIcons}</div>;
+	}
+}
+
+export default ActivityBar;
+
+/**
+ * View icon button component used in ActivityBar
+ */
 
 class ViewIcon extends Component {
 	constructor(props) {
@@ -38,28 +68,10 @@ class ViewIcon extends Component {
 	}
 }
 
-class ActivityBar extends Component {
-	constructor(props) {
-		super(props);
-	}
+/**
+ * Tooltip component for ActivityBar ViewIcons.
+ */
 
-	render() {
-		let viewIcons = Object.values(views).map(
-			(view) =>
-				!view.hideInNav && (
-					<ViewIcon
-						key={view.id}
-						viewId={view.id}
-						icon={view.icon}
-						active={this.props.activeViewId == view.id && !this.props.sideBarHidden}
-						changeView={this.props.changeView}
-						tooltipText={view.name}
-					/>
-				)
-		);
-
-		return <div className="activity-bar">{viewIcons}</div>;
-	}
-}
-
-export default ActivityBar;
+const Tooltip = (props) => {
+	return <div className="tooltip-text">{props.text}</div>;
+};

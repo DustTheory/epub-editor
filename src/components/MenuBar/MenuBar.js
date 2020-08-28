@@ -2,6 +2,10 @@ import React, { Component } from "react";
 
 import css from "./MenuBar.css";
 
+/**
+ * Menu bar component. 
+ */
+
 class MenuBar extends Component {
 	constructor(props) {
 		super(props);
@@ -26,41 +30,36 @@ class MenuBar extends Component {
 
 export default MenuBar;
 
-class MenuItem extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-	render() {
-		return (
-			<div onClick={this.props.onItemClick} className="menu-bar-item">
-				<div className="bar-item">{this.props.name}</div>
-				<div className="dropdown">{this.props.children}</div>
-			</div>
-		);
-	}
-}
+/**
+ * MenuBar menu item dropdown component. 
+ */
 
-class DropdownItem extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-	render() {
-		return (
-			<div onClick={this.props.onItemClick} className="dropdown-item">
-				{this.props.name}
-			</div>
-		);
-	}
-}
+ const MenuItem = (props) => {
+	 return ( 
+		<div onClick={props.onItemClick} className="menu-bar-item">
+			<div className="bar-item">{props.name}</div>
+			<div className="dropdown">{props.children}</div>
+		</div>
+	  );
+ }
+  
 
-class DropdownSeperator extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-	render() {
-		return <hr />;
-	}
+/**
+ * Item in MenuBar item dropdown.
+ */
+const DropdownItem = (props) => {
+	return (
+		<div onClick={props.onItemClick} className="dropdown-item">
+			{props.name}
+		</div>
+	);
+}
+ 
+
+/**
+ * Seperator in MenuBar item dropdown.
+ */
+
+const DropdownSeperator = () => {
+	return ( <hr/> );
 }

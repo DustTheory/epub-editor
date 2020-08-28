@@ -5,6 +5,11 @@ import TreeExplorer from "../TreeExplorer";
 
 import Urls from "../../libs/Urls";
 
+/**
+ * Sidebar element component built on top of the TreeExplorer component.
+ * Shows book table of contents tree.
+ */
+
 class Toc extends Component {
 	constructor(props) {
 		super(props);
@@ -30,6 +35,11 @@ class Toc extends Component {
 }
 
 export default Toc;
+
+/**
+ * Generates and returns TreeExplorer table of contents tree structure from epubjs Book navigation toc object.
+ * @param {object} toc 
+ */
 
 function buildTreeStructure(toc) {
 	function newNavPoint(el) {

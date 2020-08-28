@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
 import css from './NoBookLoaded.css';
+/**
+ * Main view component that is shown instead of every other view 
+ * (except the welcome screen) util a book is loaded into faeg.
+ */
 
 class NoBookLoaded extends Component {
     constructor(props) {

@@ -5,6 +5,11 @@ import TreeExplorer from "../TreeExplorer";
 import { file } from "jszip";
 import { setInterval } from "core-js";
 
+/**
+ * Sidebar element component built on top of the TreeExplorer component.
+ * Lists out epubjs Book spine.
+ */
+
 class SpineExplorer extends Component {
 	constructor(props) {
 		super(props);
@@ -30,6 +35,11 @@ class SpineExplorer extends Component {
 }
 
 export default SpineExplorer;
+
+/**
+ * Takes in epubjs Book spine array and turns it into a TreeExplorer compatible structure.
+ * @param {Array} spine 
+ */
 
 function buildTreeStructure(spine) {
 	spine = spine || [];

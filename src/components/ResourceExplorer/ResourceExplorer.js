@@ -6,6 +6,10 @@ import TreeExplorer from "../TreeExplorer";
 import css from "./ResourceExplorer.css";
 import Urls from "../../libs/Urls";
 
+/**
+ * Sidebar element component that shows all book resources by category.
+ */
+
 class ResourceExplorer extends Component {
 	constructor(props) {
 		super(props);
@@ -28,6 +32,11 @@ class ResourceExplorer extends Component {
 }
 
 export default ResourceExplorer;
+
+/**
+ * Generates and returns a TreeExplorer compatible structure from an epubjs Book resources object.
+ * @param {object} resources 
+ */
 
 function buildTreeStructure(resources) {
 	function newFolder() {

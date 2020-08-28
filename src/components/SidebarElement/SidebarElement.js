@@ -4,6 +4,10 @@ import css from "./SidebarElement.css";
 
 import { Scrollbars } from "react-custom-scrollbars";
 
+/**
+ * Building block component of the SideBar component.
+ */
+
 class SidebarElement extends Component {
 	constructor(props) {
 		super(props);
