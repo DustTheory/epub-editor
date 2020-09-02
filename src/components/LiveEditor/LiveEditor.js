@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
+import classNames from 'classnames';
 import Frame from 'react-frame-component';
 import CkEditor from "ckeditor4-react";
 
+import ProgressIndicatorH from '../ProgressIndicatorH';
 import css from "./LiveEditor.css";
 
 /**
@@ -16,6 +18,7 @@ class LiveEditor extends Component {
 		this.state = {};
 
 		this.editorIframeRef = React.createRef();
+		this.hProgressIndicatorRef = React.createRef();
 
 		this.showOpenFile = this.showOpenFile.bind(this);
 		this.onBeforeCkLoad = this.onBeforeCkLoad.bind(this);
@@ -44,7 +47,8 @@ class LiveEditor extends Component {
 	 */
 
 	scrollEditorToTop(){
-		this.editorIframeRef.current.node.contentDocument.scrollingElement.scrollTop = 0; 
+		let iframeDoc = this.editorIframeRef.current.node.contentDocument;
+		iframeDoc.scrollingElement.scrollTop = 0; 	
 	}
 
 	/**
@@ -59,8 +63,10 @@ class LiveEditor extends Component {
 		let filename = this.props.file.name;
 		let sectionUrl = this.props.openFileUrls.contentAnchored;
 		let request = this.props.book.load.bind(this.props.book);
-		let content = await this.props.book.spine.get(sectionUrl).render(request);
-		this.setState({ fileContent: content, filename: filename }, this.scrollEditorToTop);
+		let content = await this.props.book.spine.get(sectionUrl)?.render(request);
+		if(!content)
+			return;
+		this.setState((state) => ({ fileContent: content, filename: filename }), this.scrollEditorToTop);
 	}
 
 	/**
@@ -79,10 +85,10 @@ class LiveEditor extends Component {
 
 	render() {
 		return (
-		 	<div style={this.props.visible ? {} : { display: "none" }} className="live-editor-container">
-				 <Frame ref={this.editorIframeRef}>
-					 {/* Hacky but short and library free way to add a <style> element into dom in react */}
-				 	<style dangerouslySetInnerHTML={{__html: `
+			<div style={this.props.visible ? {} : { display: "none" }} className="live-editor-container">
+				<Frame ref={this.editorIframeRef}>
+					{/* Hacky but short and library free way to add a <style> element into dom in react */}
+					<style dangerouslySetInnerHTML={{__html: `
 						html {
 							-ms-overflow-style: none;
 							scrollbar-width: none;
@@ -104,6 +110,7 @@ class LiveEditor extends Component {
 						/>
 					</div> 
 				</Frame>
+				<ProgressIndicatorH refresh={this.state.refresh} section={this.props.section} loadNextSection={this.props.loadNextSection} loadPrevSection={this.props.loadPrevSection} firstSection={this.props.section==0} lastSection={this.props.section == this.props.nSections-1} scrollElement={this.editorIframeRef.current?.node?.contentDocument} ref={this.hProgressIndicatorRef} />
 			</div> 
 		);
 	}

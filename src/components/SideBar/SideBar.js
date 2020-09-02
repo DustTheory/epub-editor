@@ -41,6 +41,7 @@ class SideBar extends Component {
 							expanded: this.state.expandedElementId == index,
 							onElementHeaderClicked: () => this.onElementHeaderClicked(index),
 							changeOpenFile: this.props.changeOpenFile,
+							openFileUrls: this.props.openFileUrls
 						})
 				)}
 			</div>

@@ -31,14 +31,19 @@ class MainView extends Component {
 					visible={views[this.props.activeViewId].mainView == "bookPreview"}
 					book={this.props.book}
 					openFileUrls={this.props.openFileUrls}
+					changeOpenFile={this.props.changeOpenFile}
 				/>
 				<LiveEditor
 					visible={views[this.props.activeViewId].mainView == "liveEditor"}
 					book={this.props.book}
 					file={this.props.openFile}
 					openFileUrls={this.props.openFileUrls}
+					section={this.props.section}
+					nSections={this.props.nSections}
+					loadPrevSection={this.props.loadPrevSection}
+					loadNextSection={this.props.loadNextSection}
 				/>
-				<CodeEditor visible={views[this.props.activeViewId].mainView == "codeEditor"} file={this.props.openFile} />
+				<CodeEditor visible={views[this.props.activeViewId].mainView == "codeEditor"} openFileUrls={this.props.openFileUrls} file={this.props.openFile} />
 			</div>
 		);
 	}

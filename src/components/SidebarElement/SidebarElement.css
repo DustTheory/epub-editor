@@ -5,11 +5,11 @@
 	flex-direction: column;
 	overflow: hidden;
 	flex: 0 0 35px;
+	color:rgb(56, 56, 56);
 }
 
 .sidebar-element.expanded {
 	flex-grow: 1;
-	/* order: -1; I'll think about it */
 }
 
 .sidebar-element.expanded > .header {
@@ -44,9 +44,4 @@
 	padding: 0 5px;
 	font-size: 12px;
 	text-transform: uppercase;
-	color: rgb(56, 56, 56);
-}
-
-.sidebar-element > .header > .buttons > .button:hover {
-	color: black;
 }

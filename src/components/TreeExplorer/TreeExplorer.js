@@ -1,4 +1,5 @@
 import React, { Component, Children } from "react";
+import classNames from 'classnames';
 
 import iconForFile from "../../libs/icons";
 
@@ -27,6 +28,7 @@ class TreeExplorer extends Component {
 }
 
 class TreeDirectory extends Component {
+	
 	constructor(props) {
 		super(props);
 		this.state = { expanded: !!this.props.hideHeader };
@@ -55,16 +57,19 @@ class TreeDirectory extends Component {
 						onClickDirectory={this.props.onClickDirectory}
 						noIcon={section.__extraData?.noIcon}
 						lockExpanded={section.__extraData?.lockExpanded}
-						key={index}
 						directoryName={key}
 						structure={section}
 					/>
 				);
 			else return <TreeFile key={index} onClickFile={this.props.onClickFile} onkey={index} fileName={key} file={section} />;
-		});
+			});
 
 		return (
-			<div className={"directory" + (this.state.expanded || this.props.lockExpanded ? " expanded " : "")}>
+			<div className={classNames({
+				directory: true,
+				expanded: this.state.expanded || this.props.lockExpanded,
+				open: this.props.structure.__extraData?.isCurrentlyOpen
+			})}>
 				{!this.props.hideHeader && (
 					<div className="header" onClick={this.onClickDirectory}>
 						{this.props.noIcon || (
@@ -82,6 +87,7 @@ class TreeDirectory extends Component {
 }
 
 class TreeFile extends Component {
+	
 	constructor(props) {
 		super(props);
 		this.state = {};
@@ -95,7 +101,10 @@ class TreeFile extends Component {
 	}
 	render() {
 		return (
-			<div className="file" onClick={this.onClickFile}>
+			<div className={classNames({
+				file: true,
+				open: this.props.file.__extraData?.isCurrentlyOpen
+ 			})} onClick={this.onClickFile}>
 				<div className="icon">
 					<img src={iconForFile(this.props.fileName)} alt="" className="fileIcon" />
 				</div>

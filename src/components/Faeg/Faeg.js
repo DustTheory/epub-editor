@@ -12,6 +12,7 @@ import MainView from "../MainView";
 import Book from "epubjs/src/book";
 import Urls from "../../libs/Urls";
 import views, { defaultActiveViewId } from "../../libs/views";
+import { EpubCFI } from "epubjs";
 
 class Faeg extends Component {
 	constructor(props) {
@@ -21,6 +22,8 @@ class Faeg extends Component {
 			hideSidebar: views[defaultActiveViewId].hideSidebar,
 			book: new Book(),
 			openFileUrls: new Urls(),
+			section: 0,
+			nSections: 0
 		};
 
 		this.changeView = this.changeView.bind(this);
@@ -29,7 +32,9 @@ class Faeg extends Component {
 		this.uploadEpubFile = this.uploadEpubFile.bind(this);
 		this.loadEpubFile = this.loadEpubFile.bind(this);
 		this.userInputFile = this.userInputFile.bind(this);
-		this.loadFirstSection = this.loadFirstSection.bind(this);
+		this.loadNextSection = this.loadNextSection.bind(this);
+		this.loadPrevSection = this.loadPrevSection.bind(this);
+		this.loadSection = this.loadSection.bind(this);
 	}
 
 	onBookResourcesLoaded() {
@@ -51,8 +56,11 @@ class Faeg extends Component {
 
 	async changeOpenFile(link) {
 		let urls = new Urls(link, this.state.book);
+		if(this.state.openFileUrls.absoluteAnchored == urls.absoluteAnchored)
+			return;
+		this.setState({ openFileUrls: urls });
 		let file = await this.state.book.archive.zip.file(urls.absoluteUnanchored.substr(1));
-		this.setState({ openFile: file, openFileUrls: urls });
+		this.setState({ openFile: file });
 	}
 
 	/**
@@ -97,7 +105,7 @@ class Faeg extends Component {
 		newBook.loadedTimestamp = new Date();
 		await newBook.ready;
 		this.setState({ book: newBook }, async () => {
-			await this.loadFirstSection.bind(this)();
+			await this.loadSection(0);
 			this.changeView("liveEdit", true);
 		});
 	}
@@ -118,15 +126,26 @@ class Faeg extends Component {
 	 * Loads first section of the book into state.
 	 */
 
-	loadFirstSection() {
+	loadSection(sectionId) {
 		return new Promise((resolve, reject) => {
 			this.onBookResourcesLoaded().then(async () => {
-				let firstItemUrl = decodeURI(this.state.book.spine.items[0]?.url.substr(1));
+				let firstItemUrl = decodeURI(this.state.book.spine.items[sectionId]?.url.substr(1));
 				let firstItemFile = await this.state.book.archive.zip.file(firstItemUrl);
-				if (firstItemUrl && firstItemFile) this.changeOpenFile(firstItemFile.name, firstItemFile);
+				if (firstItemUrl && firstItemFile){
+					this.changeOpenFile(firstItemFile.name, firstItemFile);
+					this.setState({ section: sectionId, nSections: this.state.book.spine.items.length });
+				}
 				resolve();
 			});
 		});
+	}
+
+	loadNextSection(){
+		this.loadSection(this.state.section+1);
+	}
+
+	loadPrevSection(){
+		this.loadSection(this.state.section-1);
 	}
 
 	render() {
@@ -138,13 +157,18 @@ class Faeg extends Component {
 				})}>
 				<MenuBar uploadEpubFile={this.uploadEpubFile} />
 				<ActivityBar changeView={this.changeView} activeViewId={this.state.activeViewId} sidebarHidden={this.state.hideSidebar} />
-				<SideBar activeViewId={this.state.activeViewId} changeOpenFile={this.changeOpenFile} book={this.state.book} />
+				<SideBar activeViewId={this.state.activeViewId} changeOpenFile={this.changeOpenFile} openFileUrls={this.state.openFileUrls} book={this.state.book} />
 				<MainView
 					activeViewId={this.state.activeViewId}
 					uploadEpubFile={this.uploadEpubFile}
 					book={this.state.book}
 					openFile={this.state.openFile}
 					openFileUrls={this.state.openFileUrls}
+					section={this.state.section}
+					loadNextSection={this.loadNextSection}
+					loadPrevSection={this.loadPrevSection}
+					nSections={this.state.nSections}
+					changeOpenFile={this.changeOpenFile}
 				/>
 			</div>
 		);

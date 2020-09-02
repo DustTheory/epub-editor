@@ -86,3 +86,15 @@
 	white-space: nowrap;
 	padding-right: 15px;
 }
+
+.tree-explorer .open > .header {
+	font-weight: 600;
+}
+
+.tree-explorer .open > .header {
+	font-weight: 600;
+}
+
+.tree-explorer .file.open > .file-name {
+	font-weight: 600;
+}

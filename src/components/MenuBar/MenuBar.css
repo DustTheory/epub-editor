@@ -5,6 +5,7 @@
 	grid-column: 1 / span 3;
 	display: flex;
 	cursor: default;
+	z-index: 20;
 }
 
 .menu-bar > .menu-bar-item {

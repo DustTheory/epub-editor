@@ -1,0 +1,68 @@
+.progress-indicator-h {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - 350px);
+    height: 10px;
+    z-index: 1;
+}
+
+.nosidebar .progress-indicator-h {
+    width: calc(100% - 50px);
+}
+
+.progress-indicator-h.percent100 {
+    height: 30px;
+}
+
+.progress-indicator-h .indicator {
+    position: relative;
+    background-color: #2999c8;
+    height: 100%;
+    transition: width .15s ease;
+}
+
+.progress-indicator-h .content {
+    display: none;
+}
+
+
+.progress-indicator-h.percent100 .content {
+    display: block;
+    line-height: 30px;
+    width: 100%;
+    text-align: center;
+}
+
+.progress-indicator-h.percent100 .content span {
+    text-decoration: underline;
+    color: rgba(255, 255, 255, 0.883);
+    font-weight: 600;    
+    cursor: pointer;
+}
+
+
+.previous-section {
+    position: absolute;
+    right: 0;
+    width: calc(100% - 350px);
+    height: 30px;
+    background-color: white;
+    text-align: center;
+	line-height: 30px;
+    border-bottom: 1px solid #7e7e7e;
+    top: -100px;
+    transition: top 0.15s ease;
+    z-index: 1;
+}
+
+.previous-section.visible {
+    top: 28px;
+}
+
+.previous-section span {
+	font-weight: 600px;
+	color: #444444;
+    text-decoration: underline;
+    cursor: pointer;
+}

@@ -15,14 +15,35 @@ class SpineExplorer extends Component {
 		super(props);
 		this.state = {};
 		this.onClickItem = this.onClickItem.bind(this);
+		this.buildTreeStructure = this.buildTreeStructure.bind(this);
 	}
 
 	onClickItem(name, structure) {
 		this.props.changeOpenFile(structure.href);
 	}
 
+	/**
+	 * Takes in epubjs Book spine array and turns it into a TreeExplorer compatible structure.
+	 * @param {Array} spine 
+	 */
+
+	buildTreeStructure(spine) {
+		spine = spine || [];
+		let fileStructure = Object.defineProperty({}, "__isDirectory", {
+			value: true,
+		});
+		spine.items?.forEach((item) => {
+			fileStructure[item.href] = Object.defineProperty(item, "__extraData", {
+				value: { isCurrentlyOpen: item.url == this.props.openFileUrls.absoluteUnanchored },
+				configurable: true
+			});
+		});
+		return fileStructure;
+	}
+
+
 	render() {
-		let structure = buildTreeStructure(this.props.spine);
+		let structure = this.buildTreeStructure(this.props.spine);
 		return (
 			<SidebarElement
 				expanded={this.props.expanded && Object.keys(structure).length > 0}
@@ -35,19 +56,3 @@ class SpineExplorer extends Component {
 }
 
 export default SpineExplorer;
-
-/**
- * Takes in epubjs Book spine array and turns it into a TreeExplorer compatible structure.
- * @param {Array} spine 
- */
-
-function buildTreeStructure(spine) {
-	spine = spine || [];
-	let fileStructure = Object.defineProperty({}, "__isDirectory", {
-		value: true,
-	});
-	spine.items?.forEach((item) => {
-		fileStructure[item.href] = item;
-	});
-	return fileStructure;
-}

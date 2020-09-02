@@ -15,14 +15,49 @@ class Toc extends Component {
 		super(props);
 		this.state = {};
 		this.onClickItem = this.onClickItem.bind(this);
+		this.buildTreeStructure = this.buildTreeStructure.bind(this);
 	}
 
 	async onClickItem(name, structure) {
 		this.props.changeOpenFile(structure.__extraData.href);
 	}
 
-	render() {
-		let structure = buildTreeStructure(this.props.toc);
+	/**
+	 * Generates and returns TreeExplorer table of contents tree structure from epubjs Book navigation toc object.
+	 * @param {object} toc 
+	 */
+
+	buildTreeStructure(toc) {
+		let newNavPoint = (el) => {
+			let navPoint = buildTree(el.subitems);
+			Object.defineProperty(navPoint, "__extraData", {
+				value: {
+					id: el.id,
+					href: el.href,
+					lockExpanded: true,
+					noIcon: true,
+					isCurrentlyOpen: el.href == this.props.openFileUrls.contentAnchored
+				},
+			});
+			return navPoint;
+		}
+
+		let buildTree = (arr) => {
+			arr = arr || [];
+			let tree = Object.defineProperty({}, "__isDirectory", {
+				value: true,
+			});
+			arr.forEach((el) => {
+				tree[el.label] = newNavPoint(el);
+			});
+			return tree;
+		}
+
+		return buildTree(toc);
+	}
+
+	render() {	
+		let structure = this.buildTreeStructure(this.props.toc);
 		return (
 			<SidebarElement
 				expanded={this.props.expanded && Object.keys(structure).length > 0}
@@ -36,35 +71,3 @@ class Toc extends Component {
 
 export default Toc;
 
-/**
- * Generates and returns TreeExplorer table of contents tree structure from epubjs Book navigation toc object.
- * @param {object} toc 
- */
-
-function buildTreeStructure(toc) {
-	function newNavPoint(el) {
-		let navPoint = buildTree(el.subitems);
-		Object.defineProperty(navPoint, "__extraData", {
-			value: {
-				id: el.id,
-				href: el.href,
-				lockExpanded: true,
-				noIcon: true,
-			},
-		});
-		return navPoint;
-	}
-
-	function buildTree(arr) {
-		arr = arr || [];
-		let tree = Object.defineProperty({}, "__isDirectory", {
-			value: true,
-		});
-		arr.forEach((el) => {
-			tree[el.label] = newNavPoint(el);
-		});
-		return tree;
-	}
-
-	return buildTree(toc);
-}

@@ -16,7 +16,9 @@ class BookPreview extends Component {
 
 		this.autoResizeEditor = this.autoResizeEditor.bind(this);
 		this.renderBook = this.renderBook.bind(this);
-		this.displayOpenSection =this.displayOpenSection.bind(this);
+		this.displayOpenSection = this.displayOpenSection.bind(this);
+		this.nextPage = this.nextPage.bind(this);
+		this.prevPage = this.prevPage.bind(this);
 	}
 
 	componentDidMount() {
@@ -83,20 +85,35 @@ class BookPreview extends Component {
 	}
 
 	componentDidUpdate() {
-			async.waterfall([
-				this.renderBook,
-				this.displayOpenSection
-			]);
+		console.log(this.rendition)
+		async.waterfall([
+			this.renderBook,
+			this.displayOpenSection
+		]);
+	}
+
+	nextPage(){
+		if(!this.rendition)
+			return;
+		this.rendition.next();
+	//	this.props.changeOpenFile(this.rendition.location.start.cfi);
+	}
+
+	prevPage(){
+		if(!this.rendition)
+			return;
+		this.rendition.prev();
+	//	this.props.changeOpenFile(this.rendition.location.start.cfi);
 	}
 
 	render() {
 		return (
 			<div style={this.props.visible ? {} : { display: "none" }} className="reader" ref={this.readerRef}>
 				<div className="controls">
-					<a href="#" onClick={() => this.rendition?.prev()}>
+					<a href="#" onClick={this.prevPage}>
 						&lt;
 					</a>
-					<a href="#" onClick={() => this.rendition?.next()}>
+					<a href="#" onClick={this.nextPage}>
 						&gt;
 					</a>
 				</div>

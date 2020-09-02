@@ -12,6 +12,7 @@ var beautify_html = require("js-beautify").html;
 var beautify_xml = require("xml-beautifier");
 
 import css from "./CodeEditor.css";
+import { edit } from "ace-builds";
 
 /**
  * Code editor view component. Uses ace editor.
@@ -22,7 +23,9 @@ class CodeEditor extends Component {
 		super(props);
 
 		this.state = {};
+		this.editorRef = React.createRef();
 		this.showOpenFile = this.showOpenFile.bind(this);
+		this.jumpToAnchor = this.jumpToAnchor.bind(this);
 	}
 
 	componentDidMount(){
@@ -30,7 +33,7 @@ class CodeEditor extends Component {
 	}
 
 	componentDidUpdate() {
-		this.showOpenFile();
+		this.showOpenFile().then(this.jumpToAnchor);
 	}
 
 	/**
@@ -46,24 +49,38 @@ class CodeEditor extends Component {
 			let filenameExtension = filename.split(".").slice(-1)[0];
 			let extensionBeautifierMap = {
 				'xml': beautify_xml,
+				'ncx': beautify_xml,
+				'opf': beautify_xml,
 				'js': beautify_js,
 				'css': beautify_css,
 				'html': beautify_html,
 				'xhtml': beautify_html,
 				'htm': beautify_html
 			};
-			return (extensionBeautifierMap[filenameExtension])(fileContent);
+			let beautifyFunction = extensionBeautifierMap[filenameExtension] || (x=>x);
+			return beautifyFunction(fileContent);
 		};
 
 		let fileContent = await this.props.file.async("text");
 		this.setState({ fileContent: beautify(fileContent, this.props.file.name), filename: this.props.file.name });
+	}
 
+	/**
+	 * Finds, scrolls into view and selects line of code where currently open anchor point is defined in html file.
+	 */
+	jumpToAnchor(){
+		const findAnchorRegex = new RegExp("<([^\\s]+).*?id=\"("+this.props.openFileUrls.anchor+")\".*?>(.+?)<\\/\\1>", 'gi');
+		const editor = this.editorRef.current.editor;
+		let pos = editor.find(findAnchorRegex, {regExp: true});
+		if(!pos)
+			editor.gotoLine(0);
 	}
 
 	render() {
 		return (
 			<div style={this.props.visible ? {} : { display: "none" }} className="code-editor">
 				<AceEditor
+					ref={this.editorRef}
 					mode="html"
 					theme="github"
 					name={"ace-editor"}
